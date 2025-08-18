@@ -9,11 +9,21 @@ import Messages from './pages/Messages'
 import ChatBox from './pages/ChatBox'
 import Layout from './pages/Layout'
 import Profile from './pages/Profile'
-import { useUser } from '@clerk/clerk-react'
+import { useUser, useAuth } from '@clerk/clerk-react'
 import {Toaster} from 'react-hot-toast'
+import { useEffect } from 'react'
 
 export default function App() {
   const {user}=useUser()
+  const {getToken}=useAuth()
+  useEffect(()=>{
+if(user){
+  getToken().then((token)=>
+  
+  console.log(token)
+)
+}
+  },[user])
   return (
     <>
     <Toaster />
