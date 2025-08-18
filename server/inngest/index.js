@@ -1,7 +1,8 @@
 import { Inngest } from "inngest";
 import User from "../Models/User.js";
-import Connection from "./Models/Connections.js";
 import sendEmail from "../configs/nodemailer.js";
+import Connection from "../Models/Connection.js";
+
 
 
 // Create a client to send and receive events
