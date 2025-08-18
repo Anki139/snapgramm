@@ -15,6 +15,8 @@ const syncUserCreation= inngest.createFunction(
     async ({event}) => {
         const {id, first_name, last_name, email_addresses, image_url}=event.data
         let username=email_addresses[0].email_address.split('@')[0];
+        const full_name = [first_name, last_name].filter(Boolean).join(" ");
+
 
         // check availablity 
         const user=await User.findOne({username})
@@ -22,7 +24,7 @@ const syncUserCreation= inngest.createFunction(
         if(user){
             username=username+ Math.floor(Math.random()*10000)
         }
-        const full_name = last_name ? `${first_name} ${last_name}` : first_name || "";
+         full_name = last_name ? `${first_name} ${last_name}` : first_name || "";
         const userData={
             _id:id,
             email:email_addresses[0].email_address,
@@ -42,7 +44,7 @@ const syncUserUpdation= inngest.createFunction(
     {event:'clerk/user.updated'},
     async ({event}) => {
         const {id, first_name, last_name, email_addresses, image_url}=event.data
-const full_name = last_name ? `${first_name} ${last_name}` : first_name || "";
+ full_name = last_name ? `${first_name} ${last_name}` : first_name || "";
             const updatedUserData={
                  email:email_addresses[0].email_address,
                 full_name,
@@ -78,7 +80,7 @@ const sendNewConnectionRequestReminder= inngest.createFunction(
         await step.run('send-connection-request-mail', async () => {
             const connection=await Connection.findById(connectionId).populate('from_user_id to_user_id')
             const subject=' new connection request to you '
-           const body = `div style="font-family: Arial, sans-serif; padding: 20px;">
+           const body = `<div style="font-family: Arial, sans-serif; padding: 20px;">
 <h2>Hi ${connection.to_user_id.full_name},</h2>
 <p>You have a new connection request from ${connection.from_user_id.
 full_name} @${connection.from_user_id.username}</p>
@@ -93,7 +95,7 @@ await sendEmail({
     body
 })
         })
-        const in24Hour=new Date(Date.now()+24 * 60 * 60 * 10000)
+        const in24Hour=new Date(Date.now()+24 * 60 * 60 * 1000)
         await step.sleepUntil("wait-for-24-hours",in24Hour)
         await step.run('send-connection-request-reminder',async () => {
             const connection=await Connection.findById(connectionId).populate('from_user_id to_user_id');
