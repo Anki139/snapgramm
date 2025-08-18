@@ -1,6 +1,6 @@
 import { Inngest } from "inngest";
 import User from "../Models/User.js";
-import Connection from "../Models/connections.js";
+import Connection from "./Models/Connections.js";
 import sendEmail from "../configs/nodemailer.js";
 
 
