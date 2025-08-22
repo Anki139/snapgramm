@@ -1,6 +1,6 @@
 import fs from 'fs';
-import imagekit from '../configs/imageKit';
-import Message from '../Models/Message';
+import imagekit from '../configs/imageKit.js';
+import Message from '../Models/Message.js';
 const connections={}
  
 export const sseController=(req , res)=>{
