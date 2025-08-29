@@ -101,7 +101,7 @@ try {
     const { userId } = req.auth();
     const messages=await Message.find({
        to_user_id: userId
-    }.populate('from_user_id to_user_id')).sort({createdAt:-1})
+    }).populate('from_user_id to_user_id').sort({createdAt:-1})
 
     res.json({ success: true, messages });
 } catch (error) {

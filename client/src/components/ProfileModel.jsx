@@ -1,9 +1,15 @@
 import React, { useState } from "react";
 import { dummyUserData } from "../assets/assets";
 import { Pencil, PencilIcon } from "lucide-react";
-
+import { useDispatch, useSelector } from "react-redux";
+import { updateUser } from "../features/user/userSlice";
+import {useAuth} from '@clerk/clerk-react'
+import toast from "react-hot-toast";
 export default function ProfileModel({setShowEdit}) {
-  const user = dummyUserData;
+
+  const {getToken}=useAuth()
+  const dispatch=useDispatch();
+  const user = useSelector((state) => state.user.value);
   const [editForm, setEditForm] = useState({
     username: user.username,
     bio: user.bio,
@@ -14,6 +20,22 @@ export default function ProfileModel({setShowEdit}) {
   });
   const handleSavedProfile = async (e) => {
     e.preventDefault();
+    try {
+const userData=new FormData();
+const {username,bio,location,profile_picture,full_name,cover_photo}=editForm;
+userData.append('username',username)
+userData.append('bio',bio)
+userData.append('location',location)
+userData.append('full_name',full_name)
+if(profile_picture) userData.append('profile_picture',profile_picture)
+if(cover_photo) userData.append('cover_photo',cover_photo)
+
+      const token=await getToken()
+      dispatch(updateUser({userData,token}))
+      setShowEdit(false)
+    } catch (error) {
+      toast.error(error.message)
+    }
   };
 
   return (
@@ -23,7 +45,9 @@ export default function ProfileModel({setShowEdit}) {
           <h1 className="text-2xl font-bold text=grya-900 mb-6">
             Edit Profile
           </h1>
-          <form action="" className="space-y-4 " onSubmit={handleSavedProfile}>
+          <form action="" className="space-y-4 " onSubmit={e=>toast.promise(
+            handleSavedProfile(e),{loading:'saving.....'}
+          )}>
             {/* Profile picture  */}
             <div className="flex flex-col items-start gap-3">
               <label

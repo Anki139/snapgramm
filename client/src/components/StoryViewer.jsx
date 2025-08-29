@@ -38,7 +38,7 @@ if(!viewStory) return null;
         switch (viewStory.media_type) {
             case 'image':
                 return (
-                    <img src={viewStory.media_url} alt="" className="max-w-full max-h-screen object-contian" />
+                    <img src={viewStory.media_url} alt="" className="max-w-full max-h-screen object-contain" />
                 )
               case 'video':
                 return (
@@ -61,7 +61,7 @@ if(!viewStory) return null;
         backgroundColor:
           viewStory.media_type === "text"
             ? viewStory.background_color
-            : "#000000",
+            : "rgba(0,0,0,0.9)",
       }}
     >
       {/* progress bar  */}

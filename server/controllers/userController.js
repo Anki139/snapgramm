@@ -23,12 +23,15 @@ export const getUserData = async (req, res) => {
 export const updateUserData = async (req, res) => {
   try {
     const { userId } = req.auth();
-    const { username, bio, full_name, location } = req.body;
+    let { username, bio, full_name, location } = req.body;
 
     const tempUser = await User.findById(userId);
+     if (!tempUser) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
     !username && (username = tempUser.username);
     if (tempUser.username !== username) {
-      const user = await User.findOne({ username });
+      const user =  User.findOne({ username });
       if (user) {
         // we will not change the user name bcoz its already taken by someone
         username = tempUser.username;

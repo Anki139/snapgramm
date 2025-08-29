@@ -2,6 +2,7 @@ import fs from 'fs'
 import imagekit from '../configs/imageKit.js';
 import Story from '../Models/Story.js';
 import { inngest } from '../inngest/index.js';
+import User from '../Models/User.js';
 // add user story 
 
 export const addUserStory = async (req, res) => {
@@ -48,8 +49,8 @@ try {
     const { userId } = req.auth();
    const user=await User.findById(userId)
    // user connections and following
-   const userIds=[userId, ...user.connections, ...user.following]
-   const stories=await Story.fing({user:{$in:userIds}}).populate('user').sort({createdAt:-1})
+   const userIds=[userId, ...user.connection, ...user.following]
+   const stories=await Story.find({user:{$in:userIds}}).populate('user').sort({createdAt:-1})
     res.json({success:true, stories})
 
 } catch (error) {
