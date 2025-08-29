@@ -36,7 +36,7 @@ const fetchUserMessages=async () => {
       formData.append('to_user_id', userId)
       formData.append('text', text)
       image && formData.append('image', image)
-      const {data}=await api.post('/api/message/send',formData,{headers:{Authorization:`Bearer ${token}`,}})
+      const {data}=await api.post('/api/message/send',formData,{headers:{Authorization:`Bearer ${token}`}})
       if(data.success){
         setText('')
           setImage(null)

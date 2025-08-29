@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 export default function Connections() {
   const navigate = useNavigate();
   const [currentTab ,setCurrentTab]=useState('Followers')
- const {connections, followers,followings,pendingConnections, }=useSelector((state)=>state.connections)
+ const {connections=[], followers=[],followings=[],pendingConnections=[], }=useSelector((state)=>state.connections)
 const {getToken}=useAuth()
 const dispatch=useDispatch()
 

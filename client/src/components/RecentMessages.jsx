@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { dummyRecentMessagesData } from '../assets/assets'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import { useAuth, useUser } from '@clerk/clerk-react'
@@ -23,7 +22,7 @@ const {getToken}=useAuth()
         }
         return acc;
     },{})
-    const sortMessages=Object.values(groupedMessages.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)))
+    const sortMessages=Object.values(groupedMessages).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt))
     setMessages(sortMessages)
   }
   else{
@@ -36,9 +35,9 @@ const {getToken}=useAuth()
     useEffect(()=>{
         if(user){
  fetchRecentMessages()
- setInterval(fetchRecentMessages,30000)
+const intervalId= setInterval(fetchRecentMessages,30000)
  return ()=>{
-    clearInterval()
+    clearInterval(intervalId)
  }
         }
        
@@ -57,7 +56,7 @@ const {getToken}=useAuth()
                         <p className="text-[10px] text-slate-400">{moment(msg.createdAt).fromNow()}</p>
                     </div>
                     <div className='flex justify-between'>
-                        <p className='text-gray-500'>{msg.text? msg.text : 'Mdeia'}</p>
+                        <p className='text-gray-500'>{msg.text? msg.text : 'Media'}</p>
                         {
                             msg.seen && <p className="bg-indigo-500 text-white w-4 h-4 flex items-center justify-center rounded-full text-[10px]"></p>
                         }

@@ -31,7 +31,7 @@ const { userId } = req.auth();
 const { to_user_id , text } = req.body;
 const image=req.file;
 let media_url='';
-let media_type=image? 'image':'text';
+let message_type=image? 'image':'text';
 if(message_type==='image'){
 const fileBuffer=fs.readFileSync(image.path);
 const response= await imagekit.upload({
@@ -58,7 +58,7 @@ res.json({ success: true, message });
 
 
 // send message to userid using SSE
-const messageWithUserData=await MessagefindById(message._id).populate('from_user_id');
+const messageWithUserData=await Message.findById(message._id).populate('from_user_id');
 if(connections[to_user_id]){
     connections[to_user_id].write(`data: ${JSON.stringify(messageWithUserData)}\n\n`);
 }

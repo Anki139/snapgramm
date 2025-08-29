@@ -22,7 +22,7 @@ try {
         media_url=response.url
     }
     //create story
-    const stroy=await Story.create({
+    const story=await Story.create({
 user:userId,
 content,
 media_url,
@@ -31,8 +31,8 @@ background_color,
     })
 // schedule story deletion after 24 hours
 await inngest.send({
-    name: 'delete-story',
-    data:{storyId:stroy._id},
+    name: 'app/delete.story',
+    data:{storyId:story._id},
 })
 
     res.json({success:true,})

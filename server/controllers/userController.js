@@ -31,7 +31,7 @@ export const updateUserData = async (req, res) => {
     }
     !username && (username = tempUser.username);
     if (tempUser.username !== username) {
-      const user =  User.findOne({ username });
+      const user = await User.findOne({ username });
       if (user) {
         // we will not change the user name bcoz its already taken by someone
         username = tempUser.username;
@@ -148,7 +148,7 @@ export const unfollowUser = async (req, res) => {
     const user = await User.findById(userId);
     user.following = user.following.filter((user) => user !== id);
     await user.save();
-    const toUser = await User.findById(Id);
+    const toUser = await User.findById(id);
     toUser.followers = toUser.followers.filter((user) => user !== userId);
     await toUser.save();
     res.json({ success: true, message: "unfollowed" });
@@ -224,7 +224,7 @@ export const getUserConnection = async (req, res) => {
   try {
     const { userId } = req.auth();
     const user = await User.findById(userId).populate(
-      "connectios followers following"
+      "connection followers following"
     );
     const connection = user.connection;
     const followers = user.followers;
@@ -281,7 +281,7 @@ await connection.save()
 
 export const getUserProfile = async (req, res) => {
 try {
-  const {profileId}=req.body;
+  const {profileId}=req.params;
   const profile= await User.findById(profileId)
   if(!profile){
     return res.json({success:false, message:"profile not found"})

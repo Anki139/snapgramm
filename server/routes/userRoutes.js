@@ -16,7 +16,7 @@ userRouter.post('/unfollow',protect , unfollowUser)
 userRouter.post('/connect',protect,sendConnectionRequest )
 userRouter.post('/accept',protect,acceptConnectionRequest )
 userRouter.get('/connections',protect,getUserConnection )
-userRouter.get('/profile',protect, getUserProfile)
+userRouter.get('/profile/:profileId',protect, getUserProfile)
 userRouter.get('/recent-messages',protect, getRecentMessages)
 
 export default userRouter
