@@ -8,14 +8,14 @@ export default function Notification({t, message}) {
     <div className={`max-w-md w-full bg-white shadow-lg rounded-lg flex border border-gray-300 hover:scale-105 transition`}>
       <div className="flex-1 p-4">
         <div className="flex items-start">
-            <img src={message.from_user_id.profile_picture} alt="" className='h-10 w-10 rouded-full flex-shrink-0 mt-0.5' />
+            <img src={message.from_user_id.profile_picture} alt="" className='h-10 w-10 rounded-full flex-shrink-0 mt-0.5' />
             <div className='ml-3 flex-1'>
                 <p className="text-sm font-medium text-gray-900">{message.from_user_id.full_name}</p>
                 <p className="text-sm text-gray-500">{message.text.slice(0,40)}</p>
             </div>
         </div>
       </div>
-      <div className="flex border-1 border-gray-300">
+      <div className="flex border-2 border-gray-300">
         <button onClick={()=>{
             navigate(`/messages/${message.from_user_id._id}`)
             toast.dismiss(t.id)

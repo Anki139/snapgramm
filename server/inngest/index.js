@@ -18,7 +18,7 @@ const syncUserCreation= inngest.createFunction(
     async ({event}) => {
         const {id, first_name, last_name, email_addresses, image_url}=event.data
         let username=email_addresses[0].email_address.split('@')[0];
-        const full_name = [first_name, last_name].filter(Boolean).join(" ");
+        let full_name = [first_name, last_name].filter(Boolean).join(" ");
 
 
         // check availablity 
@@ -47,7 +47,7 @@ const syncUserUpdation= inngest.createFunction(
     {event:'clerk/user.updated'},
     async ({event}) => {
         const {id, first_name, last_name, email_addresses, image_url}=event.data
- full_name = last_name ? `${first_name} ${last_name}` : first_name || "";
+const  full_name = last_name ? `${first_name} ${last_name}` : first_name || "";
             const updatedUserData={
                  email:email_addresses[0].email_address,
                 full_name,

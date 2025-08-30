@@ -31,7 +31,7 @@ if(user){
 const token=await  getToken()
  console.log("👉 Clerk JWT token:", token)
 dispatch(fetchUser(token))
-dispatch(fetchConnections(token))
+dispatch(fetchConnections({token}))
 }
     }
     fetchData()

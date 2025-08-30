@@ -29,8 +29,8 @@ userData.append('full_name',full_name)
 if(profile_picture) userData.append('profile_picture',profile_picture)
 if(cover_photo) userData.append('cover_photo',cover_photo)
 
-      const token=await getToken()
-      dispatch(updateUser({userData,token}))
+      const token=await getToken();
+    await dispatch(updateUser({userData,token})).unwrap()
       setShowEdit(false)
     } catch (error) {
       toast.error(error.message)
@@ -41,7 +41,7 @@ if(cover_photo) userData.append('cover_photo',cover_photo)
     <div className="fixed top-0 left-0 right-0 bottom-0 z-110 h-screen overflow-y-scroll bg-black/50">
       <div className="max-w-2xl sm:py-6 mx-auto">
         <div className="rounded-lg  shadow p-6 bg-white ">
-          <h1 className="text-2xl font-bold text=grya-900 mb-6">
+          <h1 className="text-2xl font-bold text=gray-900 mb-6">
             Edit Profile
           </h1>
           <form action="" className="space-y-4 " onSubmit={e=>toast.promise(
@@ -50,7 +50,7 @@ if(cover_photo) userData.append('cover_photo',cover_photo)
             {/* Profile picture  */}
             <div className="flex flex-col items-start gap-3">
               <label
-                htmlFor="Profile_picture"
+                htmlFor="profile_picture"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
                 Profile Picture
@@ -126,7 +126,7 @@ if(cover_photo) userData.append('cover_photo',cover_photo)
               </label>
               <input
                 type="text"
-                className="w-full p-3 border border=grya-200 rounded-lg"
+                className="w-full p-3 border border=gray-200 rounded-lg"
                 placeholder="please enter your full name"
                 onChange={(e) =>
                   setEditForm({ ...editForm, full_name: e.target.value })
@@ -141,7 +141,7 @@ if(cover_photo) userData.append('cover_photo',cover_photo)
               </label>
               <input
                 type="text"
-                className="w-full p-3 border border=grya-200 rounded-lg"
+                className="w-full p-3 border border=gray-200 rounded-lg"
                 placeholder="please enter your user name"
                 onChange={(e) =>
                   setEditForm({ ...editForm, username: e.target.value })
@@ -158,7 +158,7 @@ if(cover_photo) userData.append('cover_photo',cover_photo)
               </label>
               <textarea
                 rows={3}
-                className="w-full p-3 border border=grya-200 rounded-lg"
+                className="w-full p-3 border border=gray-200 rounded-lg"
                 placeholder="please write your bio "
                 onChange={(e) =>
                   setEditForm({ ...editForm, bio: e.target.value })
@@ -173,13 +173,13 @@ if(cover_photo) userData.append('cover_photo',cover_photo)
 Location 
 
 </label>
-<input type="text" className="w-full p-3 border border=grya-200 rounded-lg" 
+<input type="text" className="w-full p-3 border border=gray-200 rounded-lg" 
 placeholder="please enter your location"
 onChange={(e)=> setEditForm({...editForm, location:e.target.value})} value={editForm.location}/>
             </div>
 
-            <div type='button' className="flex justify-end space-x-3 pt-6">
-              <button onClick={()=>setShowEdit(false)} className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">Cancel</button>
+            <div  className="flex justify-end space-x-3 pt-6">
+              <button type='button' onClick={()=>setShowEdit(false)} className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">Cancel</button>
               <button type='submit' className=" px-4 py-2 bg-gradient-to-br from-indigo-500 to-purple-600 hover:from-indigo-700 hover:to-purple-800  cursor-pointer  rounded-lg text-white">Save Changes</button>
 
             </div>

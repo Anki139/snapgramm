@@ -16,7 +16,7 @@ const {getToken}=useAuth()
             })
   if(data.success){
     const groupedMessages=data.messages.reduce((acc , message)=>{
-        const senderId= message.from_user_id._id;
+        const senderId= message.from_user_id?._id;
         if(!acc[senderId]|| new Date(message.createdAt)>new Date(acc[senderId].createdAt)){
             acc[senderId]=message
         }
@@ -41,7 +41,7 @@ const intervalId= setInterval(fetchRecentMessages,30000)
  }
         }
        
-    },[user])
+    },[user,getToken])
   return (
     <div className='bg-white max-w-xs my-4 t-4 min-h-20  rounded-md shadow text-xs text-slate-800'>
       <h3 className="font-semibold text-slate-8 mb-4">Recent Messages</h3>
