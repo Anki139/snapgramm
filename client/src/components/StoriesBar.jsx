@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
+import { dummyStoriesData } from '../assets/assets'
 import { Plus } from 'lucide-react'
 import moment from 'moment'
-import StoryModal from './StoryModel'
+import StoryModal from './StoryModal'
 import StoryViewer from './StoryViewer'
 import { useAuth } from '@clerk/clerk-react'
 import api from '../api/axios'
@@ -62,8 +63,8 @@ const StoriesBar = () => {
                                     {
                                         story.media_type === "image" ? 
                                         <img src={story.media_url} alt="" className='h-full w-full object-cover hover:scale-110 transition duration-500 opacity-70 hover:opacity-80'/>
-                                        : story.media_url?
-                                        <video src={story.media_url} className='h-full w-full object-cover hover:scale-110 transition duration-500 opacity-70 hover:opacity-80'/>:null
+                                        : 
+                                        <video src={story.media_url} className='h-full w-full object-cover hover:scale-110 transition duration-500 opacity-70 hover:opacity-80'/>
                                     }
                                 </div>
                             )
