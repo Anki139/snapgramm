@@ -4,6 +4,7 @@ import moment from 'moment'
 import { useAuth, useUser } from '@clerk/clerk-react'
 import api from '../api/axios'
 import toast from 'react-hot-toast'
+
 export default function RecentMessages() {
     const [messages, setMessages]=useState([])
 const { user}=useUser()
@@ -17,7 +18,7 @@ const {getToken}=useAuth()
   if(data.success){
     const groupedMessages=data.messages.reduce((acc , message)=>{
         const senderId= message.from_user_id?._id;
-        if(!acc[senderId]|| new Date(message.createdAt)>new Date(acc[senderId].createdAt)){
+        if(!acc[senderId]|| new Date(message.createdAt) > new Date(acc[senderId].createdAt)){
             acc[senderId]=message
         }
         return acc;
@@ -35,13 +36,13 @@ const {getToken}=useAuth()
     useEffect(()=>{
         if(user){
  fetchRecentMessages()
-const intervalId= setInterval(fetchRecentMessages,30000)
+ setInterval(fetchRecentMessages,30000)
  return ()=>{
-    clearInterval(intervalId)
+    clearInterval()
  }
         }
        
-    },[user,getToken])
+    },[user])
   return (
     <div className='bg-white max-w-xs my-4 t-4 min-h-20  rounded-md shadow text-xs text-slate-800'>
       <h3 className="font-semibold text-slate-8 mb-4">Recent Messages</h3>

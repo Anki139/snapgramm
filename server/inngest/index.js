@@ -27,7 +27,6 @@ const syncUserCreation= inngest.createFunction(
         if(user){
             username=username+ Math.floor(Math.random()*10000)
         }
-         full_name = last_name ? `${first_name} ${last_name}` : first_name || "";
         const userData={
             _id:id,
             email:email_addresses[0].email_address,
@@ -47,10 +46,10 @@ const syncUserUpdation= inngest.createFunction(
     {event:'clerk/user.updated'},
     async ({event}) => {
         const {id, first_name, last_name, email_addresses, image_url}=event.data
-const  full_name = last_name ? `${first_name} ${last_name}` : first_name || "";
+
             const updatedUserData={
                  email:email_addresses[0].email_address,
-                full_name,
+                full_name: first_name + ' ' + last_name,
                 profile_picture:image_url,
             }
        await User.findByIdAndUpdate(id, updatedUserData)
@@ -84,14 +83,12 @@ const sendNewConnectionRequestReminder= inngest.createFunction(
             const connection=await Connection.findById(connectionId).populate('from_user_id to_user_id')
             const subject=' new connection request to you '
            const body = `<div style="font-family: Arial, sans-serif; padding: 20px;">
-<h2>Hi ${connection.to_user_id.full_name},</h2>
-<p>You have a new connection request from ${connection.from_user_id.
-full_name} @${connection.from_user_id.username}</p>
-<p>Click <a href="${process.env.FRONTEND_URL}/connections" style="color:
-#10b981;">here</a> to accept or reject the request</p>
-<br/>
-<p>Thanks, <br/>PingUp Stay Connected</p>
-</div>`
+                <h2>Hi ${connection.to_user_id.full_name},</h2>
+                <p>You have a new connection request from ${connection.from_user_id.full_name} - @${connection.from_user_id.username}</p>
+                <p>Click <a href="${process.env.FRONTEND_URL}/connections" style="color: #10b981;">here</a> to accept or reject the request</p>
+                <br/>
+                <p>Thanks,<br/>PingUp - Stay Connected</p>
+            </div>`
 await sendEmail({
     to:connection.to_user_id.email,
     subject,
@@ -103,18 +100,17 @@ await sendEmail({
         await step.run('send-connection-request-reminder',async () => {
             const connection=await Connection.findById(connectionId).populate('from_user_id to_user_id');
             if(connection.status==='accept'){
-                return {message:'alreade accepted'}
+                return {message:'already accepted'}
             }
             const subject=' new connection request to you '
-           const body = `div style="font-family: Arial, sans-serif; padding: 20px;">
-<h2>Hi ${connection.to_user_id.full_name},</h2>
-<p>You have a new connection request from ${connection.from_user_id.
-full_name} @${connection.from_user_id.username}</p>
-<p>Click <a href="${process.env.FRONTEND_URL}/connections" style="color:
-#10b981;">here</a> to accept or reject the request</p>
-<br/>
-<p>Thanks, <br/>PingUp Stay Connected</p>
-</div>`
+           const body = `
+            <div style="font-family: Arial, sans-serif; padding: 20px;">
+                <h2>Hi ${connection.to_user_id.full_name},</h2>
+                <p>You have a new connection request from ${connection.from_user_id.full_name} - @${connection.from_user_id.username}</p>
+                <p>Click <a href="${process.env.FRONTEND_URL}/connections" style="color: #10b981;">here</a> to accept or reject the request</p>
+                <br/>
+                <p>Thanks,<br/>PingUp - Stay Connected</p>
+            </div>`;
 await sendEmail({
     to:connection.to_user_id.email,
     subject,
@@ -152,14 +148,15 @@ const sendNotificationOfUnseenMessages=inngest.createFunction(
 )
 for(const userId in unseenCount){
     const user=await User.findById(userId)
-    const subject=`You have ${unseenCount[userId]} unseen messages`
-    const body=`<div style="font-family: Arial, sans-serif; padding: 20px;">    
-    <h2>Hi ${user.full_name},</h2>
-    <p>You have ${unseenCount[userId]} unseen messages</p>
-    <p>Click <a href="${process.env.FRONTEND_URL}/messages" style="color: #10b981;">here</a> to view your messages</p>
-    <br/>
-    <p>Thanks, <br/>PingUp Stay Connected</p>
-    </div>`;
+    const subject= `
+            <div style="font-family: Arial, sans-serif; padding: 20px;">
+                <h2>Hi ${user.full_name},</h2>
+                <p>You have ${unseenCount[userId]} unseen messages</p>
+                <p>Click <a href="${process.env.FRONTEND_URL}/messages" style="color: #10b981;">here</a> to view them</p>
+                <br/>
+                <p>Thanks,<br/>PingUp - Stay Connected</p>
+            </div>
+            `;
 
     await sendEmail({
         to:user.email,
@@ -167,6 +164,7 @@ for(const userId in unseenCount){
         body
     })
  }
+  return {message: "Notification sent."}
 }
 
 )

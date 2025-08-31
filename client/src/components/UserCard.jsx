@@ -5,6 +5,7 @@ import { useAuth } from '@clerk/clerk-react'
 import { useNavigate } from 'react-router-dom'
 import api from '../api/axios'
 import toast from 'react-hot-toast'
+import { fetchUser } from '../features/user/userSlice'
 
 export default function UserCard({user}) {
     const currentUser=useSelector((state)=>state.user.value)
@@ -27,8 +28,8 @@ const navigate=useNavigate()
         }
 
     }
-    const handleConnectionRequest=async (params) => {
-        if(currentUser.connections.includes(user._id)){
+    const handleConnectionRequest=async () => {
+        if(currentUser.connection.includes(user._id)){
           return  navigate(`/messages/`+ user._id)
             
         }

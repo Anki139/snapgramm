@@ -22,8 +22,8 @@ export default function Profile() {
   const fetchUser = async (profileId) => {
     const token = await getToken();
     try {
-      const { data } = await api.get(
-        `/api/user/profile/${profileId}`,
+      const { data } = await api.post(
+        `/api/user/profile/`,{profileId},
         {
           headers: { Authorization: `Bearer ${token}` },
         }

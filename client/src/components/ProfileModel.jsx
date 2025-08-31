@@ -30,7 +30,7 @@ if(profile_picture) userData.append('profile_picture',profile_picture)
 if(cover_photo) userData.append('cover_photo',cover_photo)
 
       const token=await getToken();
-    await dispatch(updateUser({userData,token})).unwrap()
+     dispatch(updateUser({userData,token}))
       setShowEdit(false)
     } catch (error) {
       toast.error(error.message)

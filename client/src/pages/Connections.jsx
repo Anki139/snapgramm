@@ -9,19 +9,19 @@ import toast from "react-hot-toast";
 export default function Connections() {
   const navigate = useNavigate();
   const [currentTab ,setCurrentTab]=useState('Followers')
- const {connections=[], followers=[],followings=[],pendingConnections=[], }=useSelector((state)=>state.connections)
+ const {connections, followers,following,pendingConnections, }=useSelector((state)=>state.connections)
 const {getToken}=useAuth()
 const dispatch=useDispatch()
 
   const dataArray = [
     { label: "Followers", value: followers, icon: Users },
-    { label: "Followings", value: followings, icon: UserCheck },
+    { label: "Following", value: following, icon: UserCheck },
     { label: "Pendings", value: pendingConnections, icon: UserRoundPen },
     { label: "Connections", value: connections, icon: UserPlus },
   ];
 const handleUnfollow=async (userId) => {
   try {
-    const {data}=await api.post('/api/user/unfollow',{userId},{headers:{Authorization:`Bearer ${await getToken()}`}})
+    const {data}=await api.post('/api/user/unfollow',{id:userId},{headers:{Authorization:`Bearer ${await getToken()}`}})
     if(data.success){
       toast.success(data.message)
       dispatch(fetchConnections(await getToken()))
@@ -36,7 +36,7 @@ const handleUnfollow=async (userId) => {
 
 const acceptConnection=async (userId) => {
   try {
-    const {data}=await api.post('/api/user/accept',{userId},{headers:{Authorization:`Bearer ${await getToken()}`}})
+    const {data}=await api.post('/api/user/accept',{id:userId},{headers:{Authorization:`Bearer ${await getToken()}`}})
     if(data.success){
       toast.success(data.message)
       dispatch(fetchConnections(await getToken()))

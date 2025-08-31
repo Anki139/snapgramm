@@ -9,8 +9,7 @@ import toast from 'react-hot-toast'
 
 export default function ChatBox() {
 
-  const connections=useSelector((state)=>state.connections.connections)
-  const {messages}= useSelector((state)=>state.messages)
+ 
   const {userId}=useParams()
   const {getToken}=useAuth()
   const dispatch=useDispatch()
@@ -18,6 +17,8 @@ export default function ChatBox() {
   const [image, setImage]=useState(null)
    const [user, setUser]=useState(null)
 const messagesEndRef=useRef(null)
+ const connection=useSelector((state)=>state.connection.connection)
+  const {messages}= useSelector((state)=>state.messages)
 
 const fetchUserMessages=async () => {
   try {
@@ -57,14 +58,14 @@ return ()=>{
   },[userId])
 
 useEffect(()=>{
-  if(connections.length>0){
-    const user=connections.find(connection=>connection._id===userId)
+  if(connection.length>0){
+    const user=connection.find(conn=>conn._id===userId)
     setUser(user)
   }
-},[])
+},[connection,userId])
 
 useEffect(()=>{
-  messagesEndRef.current?.scrollIntoView({behaviou:'smooth'})
+  messagesEndRef.current?.scrollIntoView({behavior:'smooth'})
 },[messages])
 
   return user &&(

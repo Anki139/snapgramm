@@ -6,6 +6,7 @@ import Connection from "../Models/Connection.js";
 import Post from "../Models/Post.js";
 import User from "../Models/User.js";
 import fs from "fs";
+import { clerkClient } from "@clerk/express";
 
 export const getUserData = async (req, res) => {
   try {
@@ -41,8 +42,8 @@ export const updateUserData = async (req, res) => {
     const updatedData = {
       username,
       bio,
+       location,
       full_name,
-      location,
     };
     const profile = req.files.profile && req.files.profile[0];
     const cover = req.files.cover && req.files.cover[0];
@@ -61,6 +62,8 @@ export const updateUserData = async (req, res) => {
         ],
       });
       updatedData.profile_picture = url;
+       const blob = await fetch(url).then(res => res.blob());
+            await clerkClient.users.updateUserProfileImage(userId, { file: blob });
     }
 
     // for cover photo
@@ -235,7 +238,7 @@ export const getUserConnection = async (req, res) => {
         to_user_id: userId,
         status: "pending",
       }).populate("from_user_id")
-    ).map((connection) => connection.from_user_id);
+    ).map(conn => conn.from_user_id);
     res.json({
       success: true,
       connection,
@@ -255,8 +258,8 @@ export const acceptConnectionRequest = async (req, res) => {
   try {
     const { userId } = req.auth();
     const {id}=req.body
-    const connection=await Connection.findOne({from_user_id:id, to_user_id:userId})
-    if(!connection){
+    const conn=await Connection.findOne({from_user_id:id, to_user_id:userId})
+    if(!conn){
         return res.json({ success: false, message: 'Connectin is not found' });
 
     }
@@ -267,8 +270,8 @@ export const acceptConnectionRequest = async (req, res) => {
       const toUser= await User.findById(id)
     toUser.connection.push(userId)
     await toUser.save()
-connection.status='accept'
-await connection.save()
+conn.status='accept'
+await conn.save()
     res.json({ success: true, message: 'connection accepted successfully'});
 
   } catch (error) {
@@ -281,7 +284,7 @@ await connection.save()
 
 export const getUserProfile = async (req, res) => {
 try {
-  const {profileId}=req.params;
+  const {profileId}=req.body;
   const profile= await User.findById(profileId)
   if(!profile){
     return res.json({success:false, message:"profile not found"})

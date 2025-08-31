@@ -31,7 +31,7 @@ if(user){
 const token=await  getToken()
  console.log("👉 Clerk JWT token:", token)
 dispatch(fetchUser(token))
-dispatch(fetchConnections({token}))
+dispatch(fetchConnections(token))
 }
     }
     fetchData()
@@ -43,10 +43,10 @@ pathnameRef.current=pathname
 
 useEffect(()=>{
   if(user){
-    const eventSource=new EventSource(import.meta.env.VITE_BASEURL+'api/message/'+user.id)
+const eventSource = new EventSource(`${import.meta.env.VITE_BASEURL}api/message/${user.id}`)
     eventSource.onmessage=(event)=>{
       const message=JSON.parse(event.data)
-      if(pathnameRef.current===('/messages/'+message.from_user_id)){
+      if(pathnameRef.current===('/messages/'+message.from_user_id._id)){
         dispatch(addMessage(message))
       }
       else{
