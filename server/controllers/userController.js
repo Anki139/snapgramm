@@ -1,9 +1,10 @@
 import imagekit from "../configs/imageKit.js"
 import { inngest } from "../inngest/index.js"
-import Connection from "../models/Connection.js"
-import Post from "../models/Post.js"
-import User from "../models/User.js"
+import Post from "../Models/Post.js"
+import User from "../Models/User.js"
 import fs from 'fs'
+import Connection from "../Models/Connection.js"
+
 import { clerkClient } from "@clerk/express";
 
 
@@ -224,7 +225,7 @@ export const getUserConnections = async (req, res) => {
     try {
         const {userId} = req.auth()
         const user = await User.findById(userId).populate('connections followers following')
-
+console.log(user);
         const connections = user.connections
         const followers = user.followers
         const following = user.following
