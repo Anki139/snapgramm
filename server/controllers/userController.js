@@ -10,18 +10,35 @@ import { clerkClient } from "@clerk/express";
 
 // Get User Data using userId
 export const getUserData = async (req, res) => {
-    try {
-        const { userId } = req.auth()
-        const user = await User.findById(userId)
-        if(!user){
-            return res.json({success: false, message: "User not found"})
-        }
-        res.json({success: true, user})
-    } catch (error) {
-        console.log(error);
-        res.json({success: false, message: error.message})
+  try {
+    const { userId } = req.auth();
+
+    // 1. Try to find user in MongoDB
+    let user = await User.findById(userId);
+
+    // 2. If not found, fetch details from Clerk and create user
+    if (!user) {
+      const clerkUser = await clerkClient.users.getUser(userId);
+
+      user = new User({
+        _id: clerkUser.id, // Clerk userId as _id
+        email: clerkUser.emailAddresses[0]?.emailAddress,
+        full_name: `${clerkUser.firstName || ""} ${clerkUser.lastName || ""}`.trim(),
+        username: clerkUser.username || clerkUser.emailAddresses[0]?.emailAddress.split("@")[0],
+        profile_picture: clerkUser.imageUrl || "",
+      });
+
+      await user.save();
     }
-}
+
+    // 3. Send back the user
+    res.json({ success: true, user });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
 
 //  Update User Data
 export const updateUserData = async (req, res) => {
@@ -224,8 +241,9 @@ export const sendConnectionRequest = async (req, res) => {
 export const getUserConnections = async (req, res) => {
     try {
         const {userId} = req.auth()
+        console.log(userId)
         const user = await User.findById(userId).populate('connections followers following')
-console.log(user);
+
         const connections = user.connections
         const followers = user.followers
         const following = user.following

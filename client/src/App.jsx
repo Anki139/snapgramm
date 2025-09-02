@@ -25,11 +25,13 @@ const App = () => {
   const pathnameRef = useRef(pathname)
 
   const dispatch = useDispatch()
+  
 
   useEffect(()=>{
     const fetchData = async () => {
       if(user){
       const token = await getToken()
+      console.log(token)
       dispatch(fetchUser(token))
       dispatch(fetchConnections(token))
       }
