@@ -76,7 +76,7 @@ const ChatBox = () => {
   },[messages])
 
   return user && (
-    <div className='flex flex-col h-screen'>
+    <div className='flex flex-col h-screen bg-gradient-to-br from-indigo-500 to-purple-600'>
       <div className='flex items-center gap-2 p-2 md:px-10 xl:pl-42 bg-gradient-to-r from-indigo-50 to-purple-50 border-b border-gray-300'>
         <img src={user.profile_picture} alt="" className="size-8 rounded-full"/>
         <div>
@@ -103,7 +103,7 @@ const ChatBox = () => {
         </div>
       </div>
       <div className='px-4'>
-          <div className='flex items-center gap-3 pl-5 p-1.5 bg-white w-full max-w-xl mx-auto border border-gray-200 shadow rounded-full mb-5'>
+          <div className='flex items-center gap-3 pl-5 p-1.5 bg-gradient-to-br from-red-500 to-black-600 w-full max-w-xl mx-auto border border-gray-200 shadow rounded-full mb-5'>
             <input type="text" className='flex-1 outline-none text-slate-700' placeholder='Type a message...'
             onKeyDown={e=>e.key === 'Enter' && sendMessage()} onChange={(e)=>setText(e.target.value)} value={text} />
 
